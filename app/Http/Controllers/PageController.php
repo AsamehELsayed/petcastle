@@ -22,13 +22,12 @@ class PageController extends Controller
         $brands = \App\Models\Brand::limit(6)->get();
         $species = \App\Models\Species::with('breeds')->get();
         
-        $deals = \App\Models\Item::where('is_deal', true)
-            ->with(['primaryImage', 'brand'])
+        $deals = \App\Models\Item::with(['primaryImage', 'brand'])
             ->limit(10)
             ->get();
             
-        $bestSellers = \App\Models\Item::where('is_trending', true)
-            ->with(['primaryImage', 'brand', 'categories'])
+        $bestSellers = \App\Models\Item::
+            with(['primaryImage', 'brand', 'categories'])
             ->limit(12)
             ->get();
 
