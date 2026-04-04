@@ -4,6 +4,8 @@ import { DataTable } from '@/components/ui/data-table';
 import { type BreadcrumbItem } from '@/types';
 import { columns } from './Columns';
 
+import Pagination from '@/components/Pagination';
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Users',
@@ -11,7 +13,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ users, filters }: { users: { data: any[] }, filters: any }) {
+interface PaginatedUsers {
+    data: any[];
+    links: any[];
+}
+
+export default function Index({ users, filters }: { users: PaginatedUsers, filters: any }) {
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Users" />
@@ -22,12 +29,13 @@ export default function Index({ users, filters }: { users: { data: any[] }, filt
                     <p className="text-muted-foreground">Manage roles, permissions, and customer accounts.</p>
                 </div>
 
-                <div className="bg-card text-card-foreground rounded-lg p-6 border shadow-sm">
+                <div className="bg-card text-card-foreground rounded-lg p-6 border shadow-sm space-y-4">
                     <DataTable 
                         columns={columns} 
                         data={users.data} 
                         searchKey="name"
                     />
+                    <Pagination links={users.links} />
                 </div>
             </div>
         </AdminLayout>

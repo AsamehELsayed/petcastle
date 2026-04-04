@@ -20,7 +20,8 @@ class UserService extends BaseService
                   ->orWhere('email', 'like', '%' . $filters['search'] . '%');
         }
 
-        return $query->paginate(15);
+        $perPage = $filters['per_page'] ?? 25;
+        return $query->paginate($perPage);
     }
 
     public function toggleUserStatus($id)

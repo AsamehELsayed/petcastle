@@ -89,6 +89,12 @@ class ProductController extends Controller
             'categories.*' => 'exists:categories,id',
             'description' => 'nullable|string',
             'details' => 'nullable|array',
+            'details.sku' => 'nullable|string|max:255',
+            'details.barcode' => 'nullable|string|max:255',
+            'details.brand' => 'nullable|string|max:255',
+            'details.size' => 'nullable|string|max:255',
+            'details.weight' => 'nullable|numeric|min:0',
+            'details.expiration_date' => 'nullable|date',
             'images' => 'nullable|array',
             'images.*' => 'image|max:10240',
         ]);

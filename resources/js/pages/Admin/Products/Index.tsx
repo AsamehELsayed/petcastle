@@ -7,6 +7,8 @@ import { DataTable } from '@/components/ui/data-table';
 import { type BreadcrumbItem } from '@/types';
 import { columns } from './Columns';
 
+import Pagination from '@/components/Pagination';
+
 interface Product {
     id: number;
     name: string;
@@ -17,6 +19,14 @@ interface Product {
     categories?: { name: string }[];
 }
 
+interface PaginatedProducts {
+    data: Product[];
+    links: any[];
+    current_page: number;
+    last_page: number;
+    total: number;
+}
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Products',
@@ -24,7 +34,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ products, filters }: { products: { data: Product[] }, filters: any }) {
+export default function Index({ products, filters }: { products: PaginatedProducts, filters: any }) {
     const { setData, post, processing } = useForm({
         file: null as File | null,
     });
@@ -106,12 +116,13 @@ export default function Index({ products, filters }: { products: { data: Product
                     </div>
                 </div>
 
-                <div className="bg-card text-card-foreground rounded-lg p-6 border shadow-sm">
+                <div className="bg-card text-card-foreground rounded-lg p-6 border shadow-sm space-y-4">
                     <DataTable 
                         columns={columns} 
                         data={products.data} 
                         searchKey="name"
                     />
+                    <Pagination links={products.links} />
                 </div>
             </div>
         </AdminLayout>

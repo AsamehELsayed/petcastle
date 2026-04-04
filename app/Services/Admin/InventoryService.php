@@ -21,7 +21,8 @@ class InventoryService extends BaseService
             $query->where('stock', '<=', DB::raw('stock_threshold'));
         }
 
-        return $query->paginate(15);
+        $perPage = $filters['per_page'] ?? 25;
+        return $query->paginate($perPage);
     }
 
     public function updateStock($id, $quantity, $action = 'adjustment')
@@ -51,6 +52,7 @@ class InventoryService extends BaseService
             $query->where('item_id', $filters['item_id']);
         }
 
-        return $query->latest()->paginate(15);
+        $perPage = $filters['per_page'] ?? 25;
+        return $query->latest()->paginate($perPage);
     }
 }

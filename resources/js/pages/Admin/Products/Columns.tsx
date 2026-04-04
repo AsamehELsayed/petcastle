@@ -10,7 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 
 export const columns: ColumnDef<any>[] = [
     {
@@ -54,6 +54,16 @@ export const columns: ColumnDef<any>[] = [
         cell: ({ row }) => {
             const product = row.original;
 
+            const handleDelete = () => {
+                if (window.confirm(`Are you sure you want to delete "${product.name}"?`)) {
+                    router.delete(route('admin.products.destroy', product.id), {
+                        onSuccess: () => {
+                            // The page will automatically refresh with Inertia
+                        },
+                    });
+                }
+            };
+
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -75,7 +85,10 @@ export const columns: ColumnDef<any>[] = [
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem 
+                            className="text-destructive focus:bg-destructive focus:text-destructive-foreground cursor-pointer"
+                            onClick={handleDelete}
+                        >
                             <Trash className="mr-2 h-4 w-4" /> Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>

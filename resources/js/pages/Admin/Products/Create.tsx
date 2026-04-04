@@ -44,6 +44,8 @@ export default function Create({ categories, brands, species, breeds }: Props) {
             // common animal details
             species_id: '',
             breed_id: '',
+            sku: '',
+            barcode: '',
             gender: 'unknown',
             age_months: '',
             vaccinated: false as boolean,
@@ -51,8 +53,8 @@ export default function Create({ categories, brands, species, breeds }: Props) {
             weight: '',
             color: '',
             // common product details
-            manufacturer: '',
-            dimensions: '',
+            brand: '',
+            size: '',
             expiration_date: '',
         },
         images: [] as File[],
@@ -207,11 +209,31 @@ export default function Create({ categories, brands, species, breeds }: Props) {
                                     <TabsContent value="product" className="space-y-4">
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="space-y-2">
-                                                <Label htmlFor="manufacturer">Manufacturer</Label>
+                                                <Label htmlFor="sku">SKU</Label>
                                                 <Input 
-                                                    id="manufacturer" 
-                                                    value={data.details.manufacturer} 
-                                                    onChange={(e) => setData('details', { ...data.details, manufacturer: e.target.value })} 
+                                                    id="sku" 
+                                                    value={data.details.sku} 
+                                                    onChange={(e) => setData('details', { ...data.details, sku: e.target.value })} 
+                                                    placeholder="Product SKU"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="barcode">Barcode</Label>
+                                                <Input 
+                                                    id="barcode" 
+                                                    value={data.details.barcode} 
+                                                    onChange={(e) => setData('details', { ...data.details, barcode: e.target.value })} 
+                                                    placeholder="UPC/EAN Barcode"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="detail_brand">Product Brand</Label>
+                                                <Input 
+                                                    id="detail_brand" 
+                                                    value={data.details.brand} 
+                                                    onChange={(e) => setData('details', { ...data.details, brand: e.target.value })} 
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -226,11 +248,11 @@ export default function Create({ categories, brands, species, breeds }: Props) {
                                             </div>
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="dimensions">Dimensions</Label>
+                                            <Label htmlFor="size">Size / Dimensions</Label>
                                             <Input 
-                                                id="dimensions" 
-                                                value={data.details.dimensions} 
-                                                onChange={(e) => setData('details', { ...data.details, dimensions: e.target.value })} 
+                                                id="size" 
+                                                value={data.details.size} 
+                                                onChange={(e) => setData('details', { ...data.details, size: e.target.value })} 
                                                 placeholder="e.g., 50x40x30 cm"
                                             />
                                         </div>

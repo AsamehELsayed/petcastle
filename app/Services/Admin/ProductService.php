@@ -24,7 +24,8 @@ class ProductService extends BaseService
             $query->where('type', $filters['type']);
         }
 
-        return $query->paginate(15);
+        $perPage = $filters['per_page'] ?? 25;
+        return $query->paginate($perPage);
     }
 
     public function createProduct(array $data)
@@ -91,13 +92,12 @@ class ProductService extends BaseService
 
                 if ($details !== null) {
                     if ($item->type === 'animal') {
-                        // Map age_months to age if age is not present
                         if (!isset($details['age']) && isset($details['age_months'])) {
                             $details['age'] = $details['age_months'] . ' months';
                         }
-                        $item->animalDetail()->update($details);
+                        $item->animalDetail()->updateOrCreate(['item_id' => $item->id], $details);
                     } else {
-                        $item->productDetail()->update($details);
+                        $item->productDetail()->updateOrCreate(['item_id' => $item->id], $details);
                     }
                 }
 

@@ -50,6 +50,8 @@ export default function Edit({ product, categories, brands, species, breeds }: P
             // common animal details
             species_id: product.animal_detail?.species_id?.toString() || '',
             breed_id: product.animal_detail?.breed_id?.toString() || '',
+            sku: product.product_detail?.sku || '',
+            barcode: product.product_detail?.barcode || '',
             gender: product.animal_detail?.gender || 'unknown',
             age_months: product.animal_detail?.age?.replace(' months', '') || '',
             vaccinated: !!product.animal_detail?.vaccinated,
@@ -57,8 +59,8 @@ export default function Edit({ product, categories, brands, species, breeds }: P
             weight: product.animal_detail?.weight || product.product_detail?.weight || '',
             color: product.animal_detail?.color || '',
             // common product details
-            manufacturer: product.product_detail?.manufacturer || '',
-            dimensions: product.product_detail?.dimensions || '',
+            brand: product.product_detail?.brand || '',
+            size: product.product_detail?.size || '',
             expiration_date: product.product_detail?.expiration_date || '',
         },
         images: [] as File[],
@@ -75,7 +77,7 @@ export default function Edit({ product, categories, brands, species, breeds }: P
 
     const toggleCategory = (id: string) => {
         const newCategories = data.categories.includes(id)
-            ? data.categories.filter((c) => c !== id)
+            ? data.categories.filter((c: string) => c !== id)
             : [...data.categories, id];
         setData('categories', newCategories);
     };
@@ -224,11 +226,31 @@ export default function Edit({ product, categories, brands, species, breeds }: P
                                     <TabsContent value="product" className="space-y-4">
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="space-y-2">
-                                                <Label htmlFor="manufacturer">Manufacturer</Label>
+                                                <Label htmlFor="sku">SKU</Label>
                                                 <Input 
-                                                    id="manufacturer" 
-                                                    value={data.details.manufacturer} 
-                                                    onChange={(e) => setData('details', { ...data.details, manufacturer: e.target.value })} 
+                                                    id="sku" 
+                                                    value={data.details.sku} 
+                                                    onChange={(e) => setData('details', { ...data.details, sku: e.target.value })} 
+                                                    placeholder="Product SKU"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="barcode">Barcode</Label>
+                                                <Input 
+                                                    id="barcode" 
+                                                    value={data.details.barcode} 
+                                                    onChange={(e) => setData('details', { ...data.details, barcode: e.target.value })} 
+                                                    placeholder="UPC/EAN Barcode"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="detail_brand">Product Brand</Label>
+                                                <Input 
+                                                    id="detail_brand" 
+                                                    value={data.details.brand} 
+                                                    onChange={(e) => setData('details', { ...data.details, brand: e.target.value })} 
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -243,15 +265,15 @@ export default function Edit({ product, categories, brands, species, breeds }: P
                                             </div>
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="dimensions">Dimensions</Label>
+                                            <Label htmlFor="size">Size / Dimensions</Label>
                                             <Input 
-                                                id="dimensions" 
-                                                value={data.details.dimensions} 
-                                                onChange={(e) => setData('details', { ...data.details, dimensions: e.target.value })} 
+                                                id="size" 
+                                                value={data.details.size} 
+                                                onChange={(e) => setData('details', { ...data.details, size: e.target.value })} 
                                             />
                                         </div>
                                     </TabsContent>
-
+ streams
                                     <TabsContent value="animal" className="space-y-4">
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="space-y-2">

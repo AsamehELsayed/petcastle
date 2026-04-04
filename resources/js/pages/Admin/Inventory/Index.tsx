@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type BreadcrumbItem } from '@/types';
 import { columns as inventoryColumns } from './InventoryColumns';
 
+import Pagination from '@/components/Pagination';
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Inventory',
@@ -14,7 +16,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ stock, filters }: { stock: { data: any[] }, filters: any }) {
+interface PaginatedStock {
+    data: any[];
+    links: any[];
+}
+
+export default function Index({ stock, filters }: { stock: PaginatedStock, filters: any }) {
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Inventory Management" />
@@ -40,21 +47,23 @@ export default function Index({ stock, filters }: { stock: { data: any[] }, filt
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="all" className="pt-6">
-                        <div className="bg-card text-card-foreground rounded-lg p-6 border shadow-sm">
+                        <div className="bg-card text-card-foreground rounded-lg p-6 border shadow-sm space-y-4">
                             <DataTable 
                                 columns={inventoryColumns} 
                                 data={stock.data} 
                                 searchKey="name"
                             />
+                            <Pagination links={stock.links} />
                         </div>
                     </TabsContent>
                     <TabsContent value="low" className="pt-6">
-                         <div className="bg-card text-card-foreground rounded-lg p-6 border shadow-sm">
+                         <div className="bg-card text-card-foreground rounded-lg p-6 border shadow-sm space-y-4">
                             <DataTable 
                                 columns={inventoryColumns} 
-                                data={stock.data.filter(i => i.stock <= 5)} 
+                                data={stock.data.filter(i => i.stock <= (i.stock_threshold || 5))} 
                                 searchKey="name"
                             />
+                            <Pagination links={stock.links} />
                         </div>
                     </TabsContent>
                 </Tabs>
