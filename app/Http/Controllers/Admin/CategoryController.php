@@ -30,7 +30,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string',
             'species_id' => $type === 'breed' ? 'required|exists:species,id' : 'nullable',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:10240',
         ]);
 
         $data = [
@@ -58,7 +58,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string',
             'species_id' => $type === 'breed' ? 'required|exists:species,id' : 'nullable',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:10240',
         ]);
 
         $data = [

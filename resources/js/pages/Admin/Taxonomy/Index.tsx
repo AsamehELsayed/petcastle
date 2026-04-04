@@ -131,7 +131,7 @@ function TaxonomyDialog({
     onOpenChange: (open: boolean) => void 
 }) {
     const isEditing = !!item;
-    const { data, setData, post, put, processing, errors, reset } = useForm({
+    const { data, setData, post, put, processing, errors, reset, transform } = useForm({
         name: item?.name || '',
         species_id: item?.species_id || '',
         type: type,
@@ -165,13 +165,11 @@ function TaxonomyDialog({
 
         if (isEditing) {
             // Use post with _method put for file uploads in Laravel
-            post(`/admin/categories/${item.id}`, {
-                ...options,
-                data: {
-                    ...data,
-                    _method: 'put',
-                }
-            } as any);
+            transform((data) => ({
+                ...data,
+                _method: 'put',
+            }));
+            post(`/admin/categories/${item.id}`, options);
         } else {
             post('/admin/categories', options);
         }
@@ -307,7 +305,7 @@ function TaxonomyTable({
     
     const handleDelete = (id: number) => {
         if (confirm(`Are you sure you want to permanently remove this ${type.toLowerCase()}?`)) {
-            destroy(`/admin/categories/${id}`, { data: { type } } as any);
+            destroy(`/admin/categories/${id}?type=${type}`);
         }
     };
 

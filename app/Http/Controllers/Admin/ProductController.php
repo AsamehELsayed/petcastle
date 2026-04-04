@@ -58,7 +58,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'details' => 'nullable|array',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'image|max:10240',
         ]);
 
         $this->productService->createProduct($validated);
@@ -90,7 +90,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'details' => 'nullable|array',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'image|max:10240',
         ]);
 
         $this->productService->updateProduct($id, $validated);
