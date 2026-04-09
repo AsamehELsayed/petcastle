@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { Search, ShoppingCart, User, Heart, MapPin, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/ecommerce/store/useCart";
 
 const logoImg = `/images/logo.jpg`;
@@ -160,6 +161,79 @@ export function Navbar({ categories: propCategories, items: propItems }: { categ
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 z-[100] backdrop-blur-md md:hidden"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 w-[85%] max-w-sm bg-white z-[101] shadow-2xl md:hidden p-8 overflow-y-auto"
+            >
+              <div className="flex items-center justify-between mb-10">
+                <div className="flex items-center gap-3">
+                    <img src={logoImg} alt="Logo" className="h-10 w-10 rounded-xl object-cover" />
+                    <span className="font-display font-black text-xl text-primary tracking-tighter">Pet Castle</span>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(false)} className="p-3 rounded-2xl bg-secondary/50 text-primary hover:bg-secondary transition-colors">
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <nav className="space-y-6">
+                <div>
+                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-4 px-4">Navigation</p>
+                  <div className="space-y-1">
+                    <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="block py-4 px-5 rounded-2xl text-lg font-bold text-foreground hover:bg-primary/5 hover:text-primary transition-all">Home</Link>
+                    <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="block py-4 px-5 rounded-2xl text-lg font-bold text-foreground hover:bg-primary/5 hover:text-primary transition-all">All Collections</Link>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-4 mt-8 px-4">Departments</p>
+                  <div className="space-y-1">
+                    {categories.map((cat: any) => (
+                        <Link 
+                          key={cat}
+                          href={`/products?category=${cat.toLowerCase()}`}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="block py-4 px-5 rounded-2xl text-lg font-bold text-primary hover:bg-primary/5 transition-all"
+                        >
+                          {cat}
+                        </Link>
+                      ))}
+                  </div>
+                </div>
+              </nav>
+
+              <div className="mt-12 pt-8 border-t border-border">
+                <div className="flex items-center gap-4 mb-6 px-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shadow-inner">
+                     <User className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <p className="font-black text-foreground">Royal Member</p>
+                    <p className="text-[10px] text-primary font-bold uppercase tracking-wider">Join for rewards</p>
+                  </div>
+                </div>
+                <button className="w-full bg-primary text-white py-5 rounded-2xl font-black text-xs tracking-[0.2em] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all uppercase">
+                    Connect Account
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

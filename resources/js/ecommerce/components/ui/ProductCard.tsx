@@ -44,7 +44,7 @@ export function ProductCard({ product }: { product: any }) {
       {/* Image Concept - Minimalist & Focused */}
       <Link 
         href={route('products.show', product.id)} 
-        className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#FAFAFB] to-[#F3F4F6] p-8 flex items-center justify-center"
+        className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#FAFAFB] to-[#F3F4F6] p-4 sm:p-8 flex items-center justify-center"
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         <motion.img
@@ -67,7 +67,7 @@ export function ProductCard({ product }: { product: any }) {
       </Link>
 
       {/* Content Area - Refined Spacing */}
-      <div className="p-6 flex flex-col flex-1">
+      <div className="p-4 sm:p-6 flex flex-col flex-1">
         <div className="flex items-center gap-2 mb-2">
             <span className="text-[10px] font-black text-primary/60 uppercase tracking-[0.2em]">{brandName}</span>
             <div className="h-0.5 w-0.5 rounded-full bg-primary/20" />
@@ -75,7 +75,7 @@ export function ProductCard({ product }: { product: any }) {
         </div>
         
         <Link href={route('products.show', product.id)}>
-          <h3 className="font-bold text-[#1E293B] text-lg line-clamp-1 mb-4 group-hover:text-primary transition-colors leading-tight tracking-tight">
+          <h3 className="font-bold text-[#1E293B] text-base sm:text-lg line-clamp-1 mb-4 group-hover:text-primary transition-colors leading-tight tracking-tight">
             {product.name}
           </h3>
         </Link>
@@ -88,7 +88,7 @@ export function ProductCard({ product }: { product: any }) {
                 {Number(product.original_price || product.originalPrice).toFixed(2)} JD
               </span>
             )}
-            <span className={`text-xl font-black tracking-tighter ${isSoldOut ? "text-muted-foreground/40" : "text-[#1E293B]"}`}>
+            <span className={`text-lg sm:text-xl font-black tracking-tighter ${isSoldOut ? "text-muted-foreground/40" : "text-[#1E293B]"}`}>
               {isSoldOut ? "—" : `${Number(product.price).toFixed(2)}`} <span className="text-xs ml-1">JD</span>
             </span>
           </div>

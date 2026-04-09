@@ -94,7 +94,7 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="text-5xl md:text-7xl font-display font-black text-[#1E293B] leading-[0.9] tracking-tighter mb-6"
+                  className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-[#1E293B] leading-[0.9] tracking-tighter mb-6"
                 >
                   {activeCategory ? activeCategory.name : (
                     <>
@@ -235,9 +235,15 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
               
               {/* Refined Toolbar */}
               <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4 p-2 bg-white rounded-[1.5rem] border border-border/50 shadow-xl shadow-black/5">
-                <div className="flex items-center gap-1 bg-secondary/30 p-1.5 rounded-2xl w-full sm:w-auto">
-                  <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-white text-primary font-black text-xs shadow-sm"><LayoutGrid className="w-4 h-4" /> Grid</button>
-                  <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-muted-foreground font-bold text-xs hover:bg-white mt-0"><List className="w-4 h-4" /> List</button>
+                <div className="flex items-center gap-1 bg-secondary/30 p-1.5 rounded-2xl w-full sm:w-auto overflow-x-auto no-scrollbar">
+                  <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-xl bg-white text-primary font-black text-[10px] sm:text-xs shadow-sm whitespace-nowrap"><LayoutGrid className="w-4 h-4" /> Grid</button>
+                  <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-xl text-muted-foreground font-bold text-[10px] sm:text-xs hover:bg-white mt-0 whitespace-nowrap"><List className="w-4 h-4" /> List</button>
+                  <button 
+                    onClick={() => setIsSidebarOpen(true)}
+                    className="lg:hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-xl text-primary font-bold text-[10px] sm:text-xs hover:bg-white whitespace-nowrap"
+                  >
+                    <Filter className="w-4 h-4" /> Filters
+                  </button>
                 </div>
                 
                 <div className="flex items-center gap-3 pr-4 w-full sm:w-auto justify-end">
