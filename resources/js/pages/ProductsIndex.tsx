@@ -389,23 +389,45 @@ export default function ProductsIndex({ items, categories = [], brands = [], fil
               {/* Premium Pagination */}
               {items.last_page > 1 && (
                 <div className="mt-20 flex flex-col items-center gap-6">
-                  <div className="flex items-center gap-3">
-                    {Array.from({ length: items.last_page }, (_, i) => i + 1).map(page => (
-                      <button
-                        key={page}
-                        onClick={() => router.get(route('products.index'), { ...filters, page }, { preserveState: true })}
-                        className={`relative w-14 h-14 rounded-2xl font-black text-sm transition-all duration-300 group ${
-                          items.current_page === page 
-                            ? "bg-primary text-white shadow-2xl shadow-primary/40 scale-110" 
-                            : "bg-white border border-border/40 text-muted-foreground hover:border-primary hover:text-primary hover:shadow-xl hover:shadow-black/5"
-                        }`}
-                      >
-                        {page}
-                        {items.current_page === page && (
-                            <motion.div layoutId="page-dot" className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full blur-[2px]" />
-                        )}
-                      </button>
-                    ))}
+                  <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3">
+                    {(() => {
+                      const { current_page, last_page } = items;
+                      const pages = [];
+                      if (last_page <= 7) {
+                        for (let i = 1; i <= last_page; i++) pages.push(i);
+                      } else {
+                        if (current_page <= 4) {
+                          pages.push(1, 2, 3, 4, 5, '...', last_page);
+                        } else if (current_page >= last_page - 3) {
+                          pages.push(1, '...', last_page - 4, last_page - 3, last_page - 2, last_page - 1, last_page);
+                        } else {
+                          pages.push(1, '...', current_page - 1, current_page, current_page + 1, '...', last_page);
+                        }
+                      }
+                      
+                      return pages.map((page, idx) => {
+                        if (page === '...') {
+                          return <span key={`ellipsis-${idx}`} className="px-1 sm:px-2 text-muted-foreground font-black tracking-widest">...</span>;
+                        }
+                        
+                        return (
+                          <button
+                            key={`page-${page}`}
+                            onClick={() => router.get(route('products.index'), { ...filters, page }, { preserveState: true })}
+                            className={`relative w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl font-black text-xs sm:text-sm transition-all duration-300 group ${
+                              items.current_page === page 
+                                ? "bg-primary text-white shadow-xl sm:shadow-2xl shadow-primary/40 scale-110 z-10" 
+                                : "bg-white border border-border/40 text-muted-foreground hover:border-primary hover:text-primary hover:shadow-xl hover:shadow-black/5"
+                            }`}
+                          >
+                            {page}
+                            {items.current_page === page && (
+                                <motion.div layoutId="page-dot" className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full blur-[2px]" />
+                            )}
+                          </button>
+                        );
+                      });
+                    })()}
                   </div>
                   <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em]">Discover More</p>
                 </div>
