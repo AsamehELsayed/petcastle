@@ -274,8 +274,8 @@ export function ShopByPetBlock({ data, species, items, animals }: { data: any, s
         </div>
         <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
           {species?.slice(0, 5).map((pet: any, i) => {
-            // Try to find an image from an animal of this species
-            const speciesImage = items?.find((item: any) => 
+            // Try to find an image from the pet model or from an animal of this species
+            const speciesImage = pet.image_url || items?.find((item: any) => 
                 item.species?.some((s: any) => s.id === pet.id) || 
                 item.name.toLowerCase().includes(pet.name.toLowerCase())
             )?.main_image;
@@ -321,7 +321,7 @@ export function ShopByCategoryBlock({ data, categories, items }: { data: any, ca
               return Tag;
             })();
             
-            const categoryImage = items?.find((item: any) => 
+            const categoryImage = cat.image_url || items?.find((item: any) => 
                 item.categories?.some((c: any) => c.id === cat.id) ||
                 item.name.toLowerCase().includes(cat.name.toLowerCase())
             )?.main_image;

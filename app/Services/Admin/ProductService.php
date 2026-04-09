@@ -24,8 +24,18 @@ class ProductService extends BaseService
             $query->where('type', $filters['type']);
         }
 
+        if (!empty($filters['category_id'])) {
+            $query->whereHas('categories', function ($q) use ($filters) {
+                $q->where('categories.id', $filters['category_id']);
+            });
+        }
+
+        if (!empty($filters['brand_id'])) {
+            $query->where('brand_id', $filters['brand_id']);
+        }
+
         $perPage = $filters['per_page'] ?? 25;
-        return $query->paginate($perPage);
+        return $query->latest()->paginate($perPage);
     }
 
     public function createProduct(array $data)

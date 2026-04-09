@@ -24,6 +24,8 @@ class ProductController extends Controller
         return Inertia::render('Admin/Products/Index', [
             'products' => $items,
             'filters' => $request->only(['search', 'category_id', 'type', 'brand_id']),
+            'categories' => \App\Models\Category::all(['id', 'name']),
+            'brands' => \App\Models\Brand::all(['id', 'name']),
         ]);
     }
 
