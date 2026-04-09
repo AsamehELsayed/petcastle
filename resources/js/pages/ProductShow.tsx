@@ -21,16 +21,11 @@ import {
   Award,
   Zap
 } from "lucide-react";
-import { Navbar } from "@/ecommerce/components/layout/Navbar";
-import { Footer } from "@/ecommerce/components/layout/Footer";
+import GuestLayout from "@/layouts/guest-layout";
 import { ProductCard } from "@/ecommerce/components/ui/ProductCard";
-import { CartDrawer } from "@/ecommerce/components/cart/CartDrawer";
 import { useCart } from "@/ecommerce/store/useCart";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 declare const route: any;
-
-const queryClient = new QueryClient();
 
 interface Props {
   product: any;
@@ -60,10 +55,9 @@ export default function ProductShow({ product, relatedProducts }: Props) {
   const brandName = product.brand?.name || product.product_detail?.brand || "Premium Choice";
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <div className="min-h-screen flex flex-col bg-[#FAFAFB] selection:bg-primary/10 selection:text-primary">
         <Head title={`${product.name} - Prestige Collection - Castle Pets`} />
-        <Navbar />
 
         {/* Dynamic Background */}
         <div className="fixed inset-0 pointer-events-none -z-10">
@@ -394,9 +388,9 @@ export default function ProductShow({ product, relatedProducts }: Props) {
           )}
         </main>
 
-        <Footer />
-        <CartDrawer />
       </div>
-    </QueryClientProvider>
+    </>
   );
 }
+
+ProductShow.layout = (page: React.ReactNode) => <GuestLayout children={page} />;

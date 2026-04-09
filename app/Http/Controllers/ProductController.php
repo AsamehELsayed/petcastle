@@ -24,6 +24,13 @@ class ProductController extends Controller
             });
         }
 
+        // Filtering by Brand
+        if ($request->has('brand')) {
+            $query->whereHas('brand', function($q) use ($request) {
+                $q->where('slug', $request->brand);
+            });
+        }
+
         // Search
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -46,11 +53,13 @@ class ProductController extends Controller
 
         $items = $query->paginate(12)->withQueryString();
         $categories = Category::whereNull('parent_id')->with('children')->get();
+        $brands = \App\Models\Brand::all();
 
         return Inertia::render('ProductsIndex', [
             'items' => $items,
             'categories' => $categories,
-            'filters' => $request->only(['category', 'search', 'sort']),
+            'brands' => $brands,
+            'filters' => $request->only(['category', 'brand', 'search', 'sort']),
         ]);
     }
 

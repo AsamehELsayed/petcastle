@@ -32,11 +32,11 @@ export function Navbar({ categories: propCategories, items: propItems }: { categ
   const categories = dbCategories.length > 0 ? dbCategories.map((c: any) => c.name) : ["Products", "Collections"];
 
   return (
-    <header className="sticky top-0 z-50 w-full flex flex-col bg-blue-700 text-white">
+    <header className="sticky top-0 z-50 w-full flex flex-col bg-blue-700 text-white max-w-full overflow-x-hidden">
       {/* Top Promo Bar */}
       <div className="bg-primary text-primary-foreground text-xs font-medium py-1.5 px-4 overflow-hidden relative flex items-center justify-center">
-        <div className="max-w-7xl mx-auto w-full flex justify-center text-center">
-          <p className="animate-pulse">🎉 WOW Sale — Up to 70% OFF | Use code <span className="text-accent font-bold">PETS10</span> for extra 10% off | Free delivery above 20 JD</p>
+        <div className="max-w-7xl mx-auto w-full flex justify-center text-center items-center overflow-hidden">
+          <p className="animate-pulse px-4">🎉 WOW Sale — Up to 70% OFF | Use code <span className="text-accent font-bold">PETS10</span> for extra 10% off | Free delivery above 20 JD</p>
         </div>
       </div>
 

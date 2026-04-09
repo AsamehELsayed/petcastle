@@ -17,15 +17,10 @@ import {
   ArrowRight,
   Sparkles
 } from "lucide-react";
-import { Navbar } from "@/ecommerce/components/layout/Navbar";
-import { Footer } from "@/ecommerce/components/layout/Footer";
+import GuestLayout from "@/layouts/guest-layout";
 import { ProductCard } from "@/ecommerce/components/ui/ProductCard";
-import { CartDrawer } from "@/ecommerce/components/cart/CartDrawer";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 declare const route: any;
-
-const queryClient = new QueryClient();
 
 interface Props {
   items: {
@@ -36,14 +31,16 @@ interface Props {
     last_page: number;
   };
   categories: any[];
+  brands: any[];
   filters: {
     category?: string;
+    brand?: string;
     search?: string;
     sort?: string;
   };
 }
 
-export default function ProductsIndex({ items, categories = [], filters = {} }: Props) {
+export default function ProductsIndex({ items, categories = [], brands = [], filters = {} }: Props) {
   const [search, setSearch] = useState(filters.search || "");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -60,14 +57,19 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
     router.get(route('products.index'), { ...filters, category: categorySlug || undefined }, { preserveState: true });
   };
 
+  const handleBrand = (brandSlug: string | null) => {
+    router.get(route('products.index'), { ...filters, brand: brandSlug || undefined }, { preserveState: true });
+  };
+
   const activeCategory = categories.find(c => c.slug === filters.category) || 
                          categories.flatMap(c => c.children || []).find(c => c.slug === filters.category);
 
+  const activeBrand = brands.find(b => b.slug === filters.brand);
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen flex flex-col bg-[#FDFDFF] selection:bg-primary/10 selection:text-primary">
+    <>
+      <div className="min-h-screen flex flex-col bg-[#FDFDFF] selection:bg-primary/10 selection:text-primary overflow-x-hidden">
         <Head title="Premium Pet Supplies - Castle Pets" />
-        <Navbar />
 
         {/* Global Design System Background Elements */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
@@ -96,7 +98,7 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
                   transition={{ delay: 0.1 }}
                   className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-[#1E293B] leading-[0.9] tracking-tighter mb-6"
                 >
-                  {activeCategory ? activeCategory.name : (
+                  {activeCategory ? activeCategory.name : activeBrand ? activeBrand.name : (
                     <>
                       Curated <br /> Supplies
                     </>
@@ -145,6 +147,12 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
                   <>
                     <ChevronRight className="w-3 h-3 text-muted-foreground/30" />
                     <span className="text-foreground">{activeCategory.name}</span>
+                  </>
+                )}
+                {!activeCategory && activeBrand && (
+                  <>
+                    <ChevronRight className="w-3 h-3 text-muted-foreground/30" />
+                    <span className="text-foreground">{activeBrand.name}</span>
                   </>
                 )}
             </div>
@@ -215,23 +223,53 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
                   </div>
                 </div>
 
-                {/* Refined Filter Group */}
-                <div className="bg-[#1E3A8A] rounded-[2rem] p-8 text-white relative overflow-hidden shadow-2xl shadow-primary/30">
-                  <div className="relative z-10">
-                    <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-md border border-white/20">
-                        <Sparkles className="w-6 h-6 text-accent" />
+                {/* Brands Collection */}
+                <div className="bg-white/40 backdrop-blur-xl border border-white p-2 rounded-[2rem] shadow-xl shadow-blue-900/5">
+                  <div className="p-6">
+                    <h3 className="text-xs font-black text-primary tracking-[0.2em] uppercase mb-6 opacity-60">Brands</h3>
+                    <div className="space-y-1">
+                        <button
+                          onClick={() => handleBrand(null)}
+                          className={`w-full flex items-center gap-4 px-4 py-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                            !filters.brand ? "bg-primary text-white shadow-xl shadow-primary/20 scale-[1.02]" : "text-muted-foreground hover:bg-white hover:text-primary hover:shadow-lg hover:shadow-black/5"
+                          }`}
+                        >
+                          <div className={`p-2 rounded-xl ${!filters.brand ? "bg-white/20" : "bg-primary/5"}`}>
+                              <LayoutGrid className="w-4 h-4" />
+                          </div>
+                          All Brands
+                        </button>
+
+                        {brands.map(brand => (
+                          <div key={brand.id} className="group/brand">
+                              <button
+                              onClick={() => handleBrand(brand.slug)}
+                              className={`w-full flex items-center gap-4 px-4 py-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                                  filters.brand === brand.slug ? "bg-primary text-white shadow-xl shadow-primary/20 scale-[1.02]" : "text-muted-foreground hover:bg-white hover:text-primary hover:shadow-lg hover:shadow-black/5"
+                              }`}
+                              >
+                              <div className={`p-2 rounded-xl transition-colors overflow-hidden ${filters.brand === brand.slug ? "bg-white/20 text-white" : "bg-primary/5 text-primary group-hover/brand:bg-primary group-hover/brand:text-white"}`}>
+                                  {brand.image_url ? (
+                                      <img src={brand.image_url} alt={brand.name} className="w-4 h-4 object-cover" />
+                                  ) : (
+                                      <Settings2 className="w-4 h-4" />
+                                  )}
+                              </div>
+                              {brand.name}
+                              </button>
+                          </div>
+                        ))}
                     </div>
-                    <h4 className="text-2xl font-display font-black leading-tight mb-2">Member <br /> Exclusive</h4>
-                    <p className="text-white/60 text-sm font-medium mb-6 leading-relaxed">Join our club and get up to 20% off on your first recurring order.</p>
-                    <button className="w-full bg-accent text-white py-4 rounded-2xl font-black text-sm tracking-wider shadow-lg shadow-accent/20 hover:scale-105 transition-transform">JOIN THE CLUB</button>
                   </div>
-                  <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-accent/20 rounded-full blur-[60px]" />
                 </div>
+
+                {/* Refined Filter Group */}
+  
               </div>
             </aside>
 
             {/* Product Grid Area */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               
               {/* Refined Toolbar */}
               <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4 p-2 bg-white rounded-[1.5rem] border border-border/50 shadow-xl shadow-black/5">
@@ -266,7 +304,7 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
 
               {/* Active Filter Tags */}
               <AnimatePresence>
-                {(filters.category || filters.search) && (
+                {(filters.category || filters.brand || filters.search) && (
                     <motion.div 
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -278,6 +316,13 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
                         <span className="text-xs font-black text-primary/60 uppercase tracking-widest leading-none">Group:</span>
                         <span className="text-sm font-black text-primary leading-none uppercase">{activeCategory?.name}</span>
                         <button onClick={() => handleCategory(null)} className="p-1.5 rounded-lg bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all"><X className="w-3 h-3" /></button>
+                        </div>
+                    )}
+                    {filters.brand && (
+                        <div className="inline-flex items-center gap-3 bg-white border border-primary/20 pl-4 pr-2 py-2 rounded-2xl shadow-lg shadow-primary/5 group">
+                        <span className="text-xs font-black text-primary/60 uppercase tracking-widest leading-none">Brand:</span>
+                        <span className="text-sm font-black text-primary leading-none uppercase">{activeBrand?.name}</span>
+                        <button onClick={() => handleBrand(null)} className="p-1.5 rounded-lg bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all"><X className="w-3 h-3" /></button>
                         </div>
                     )}
                     {filters.search && (
@@ -292,12 +337,11 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
               </AnimatePresence>
 
               {/* Ultra High Fidelity Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-                <AnimatePresence mode="popLayout">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <AnimatePresence>
                   {items.data.map((item, i) => (
                     <motion.div
                       key={item.id}
-                      layout
                       initial={{ opacity: 0, y: 40 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.9 }}
@@ -370,9 +414,6 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
           </div>
         </main>
 
-        <Footer />
-        <CartDrawer />
-
         {/* Mobile Filter Sheet Overlay */}
         <AnimatePresence>
           {isSidebarOpen && (
@@ -421,12 +462,31 @@ export default function ProductsIndex({ items, categories = [], filters = {} }: 
                             ))}
                         </div>
                    </div>
+                   
+                   <div className="space-y-4 pt-6 mt-6 border-t border-border/40">
+                        <p className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em] mb-4">By Brand</p>
+                        <div className="flex flex-wrap gap-3">
+                            {brands.map(brand => (
+                                <button
+                                    key={brand.id}
+                                    onClick={() => { handleBrand(brand.slug); setIsSidebarOpen(false); }}
+                                    className={`px-6 py-3 rounded-2xl border-2 font-bold text-sm transition-all ${
+                                        filters.brand === brand.slug ? "border-primary bg-primary text-white shadow-xl shadow-primary/20" : "border-border/40 text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
+                                    }`}
+                                >
+                                    {brand.name}
+                                </button>
+                            ))}
+                        </div>
+                   </div>
                 </div>
               </motion.div>
             </>
           )}
         </AnimatePresence>
       </div>
-    </QueryClientProvider>
+    </>
   );
 }
+
+ProductsIndex.layout = (page: React.ReactNode) => <GuestLayout children={page} />;

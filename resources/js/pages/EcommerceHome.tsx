@@ -3,13 +3,9 @@ import { motion } from "framer-motion";
 import { ChevronRight, ShieldCheck, Truck, RotateCcw, Headphones, Tag, UtensilsCrossed, Shirt, Stethoscope, Scissors } from "lucide-react";
 import { ProductCard } from "@/ecommerce/components/ui/ProductCard";
 import { Head, Link } from "@inertiajs/react";
-import { Navbar } from "@/ecommerce/components/layout/Navbar";
-import { Footer } from "@/ecommerce/components/layout/Footer";
-import { CartDrawer } from "@/ecommerce/components/cart/CartDrawer";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import GuestLayout from "@/layouts/guest-layout";
 import { Button } from "@/components/ui/button";
 
-const queryClient = new QueryClient();
 const logoImg = `/images/logo.jpg`;
 
 // MAIN RENDERER
@@ -76,10 +72,8 @@ export default function EcommerceHome({
   ])].slice(0, 6);
 
   return (
-    <div className="ecommerce-body flex flex-col min-h-screen">
-      <QueryClientProvider client={queryClient}>
+    <>
         <Head title={page?.title || "Castle Pets - CMS Page"} />
-        <Navbar />
         
         <main className="flex-1 w-full overflow-x-hidden bg-background">
           {page?.active_sections && page.active_sections.length > 0 ? (
@@ -102,13 +96,11 @@ export default function EcommerceHome({
               </div>
           )}
         </main>
-        
-        <Footer />
-        <CartDrawer />
-      </QueryClientProvider>
-    </div>
+    </>
   );
 }
+
+EcommerceHome.layout = (page: React.ReactNode) => <GuestLayout children={page} />;
 
 // SECTION RENDERER ENGINE
 function SectionRenderer({ section, context }: { section: any, context: any }) {
