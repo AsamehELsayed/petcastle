@@ -24,11 +24,19 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $type = $request->input('type'); // category, brand, species, breed
+        $type = $request->input('type');
         $model = $this->getModelByType($type);
 
+        $tableName = match ($type) {
+            'category' => 'categories',
+            'brand' => 'brands',
+            'species' => 'species',
+            'breed' => 'breeds',
+            default => abort(400, 'Invalid taxonomy type'),
+        };
+
         $request->validate([
-            'name' => 'required|string',
+            'name' => "required|string|unique:{$tableName},name",
             'species_id' => $type === 'breed' ? 'required|exists:species,id' : 'nullable',
             'image' => 'nullable|image|max:10240',
         ]);
@@ -37,6 +45,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name),
         ];
+
         if ($type === 'breed') {
             $data['species_id'] = $request->species_id;
         }
@@ -55,8 +64,16 @@ class CategoryController extends Controller
         $model = $this->getModelByType($type);
         $item = $model::findOrFail($id);
 
+        $tableName = match ($type) {
+            'category' => 'categories',
+            'brand' => 'brands',
+            'species' => 'species',
+            'breed' => 'breeds',
+            default => abort(400, 'Invalid taxonomy type'),
+        };
+
         $request->validate([
-            'name' => 'required|string',
+            'name' => "required|string|unique:{$tableName},name,{$id}",
             'species_id' => $type === 'breed' ? 'required|exists:species,id' : 'nullable',
             'image' => 'nullable|image|max:10240',
         ]);
@@ -65,6 +82,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name),
         ];
+
         if ($type === 'breed') {
             $data['species_id'] = $request->species_id;
         }
