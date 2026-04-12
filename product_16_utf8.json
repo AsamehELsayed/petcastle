@@ -1,0 +1,116 @@
+{
+    "id": 16,
+    "brand_id": 1,
+    "name": "Adria Weaver",
+    "description": "Ab quaerat sed qui s",
+    "price": "657.00",
+    "stock": 12,
+    "low_stock_threshold": null,
+    "status": "active",
+    "main_image": "products\/AerPc5GszAn3IMWg8ztVTgOw4XiwnxeH7vZlmX8P.jpg",
+    "type": "animal",
+    "avg_rating": "0.00",
+    "reviews_count": 0,
+    "data": null,
+    "created_at": "2026-04-03T14:19:22.000000Z",
+    "updated_at": "2026-04-03T14:19:24.000000Z",
+    "categories": [
+        {
+            "id": 1,
+            "name": "Pets",
+            "slug": "pets",
+            "parent_id": null,
+            "created_at": "2026-03-31T20:01:07.000000Z",
+            "updated_at": "2026-04-01T12:11:09.000000Z",
+            "image": null,
+            "image_url": null,
+            "pivot": {
+                "item_id": 16,
+                "category_id": 1
+            }
+        }
+    ],
+    "brand": {
+        "id": 1,
+        "name": "sdfghjkl",
+        "slug": "sdfghjkl",
+        "logo": null,
+        "created_at": "2026-04-01T12:12:44.000000Z",
+        "updated_at": "2026-04-01T12:12:44.000000Z",
+        "image": "taxonomies\/Sib9dlYfJYp0zKqdoFdmB30aQudOEIjcDJVC69Ny.jpg",
+        "image_url": "http:\/\/localhost\/storage\/taxonomies\/Sib9dlYfJYp0zKqdoFdmB30aQudOEIjcDJVC69Ny.jpg"
+    },
+    "species": [],
+    "breed": {
+        "id": 1,
+        "name": "Golden Retriever",
+        "slug": "golden-retriever",
+        "species_id": 1,
+        "created_at": "2026-03-31T20:01:07.000000Z",
+        "updated_at": "2026-04-01T12:11:09.000000Z",
+        "image": null,
+        "laravel_through_key": 16,
+        "image_url": null
+    },
+    "animal_detail": {
+        "id": 2,
+        "item_id": 16,
+        "species_id": 1,
+        "breed_id": 1,
+        "age": "11 months",
+        "gender": "unknown",
+        "color": null,
+        "weight": null,
+        "vaccinated": false,
+        "trained": false,
+        "health_status": null,
+        "created_at": "2026-04-03T14:19:22.000000Z",
+        "updated_at": "2026-04-03T14:19:22.000000Z",
+        "species": {
+            "id": 1,
+            "name": "Dog",
+            "slug": "dog",
+            "created_at": "2026-03-31T20:01:07.000000Z",
+            "updated_at": "2026-04-01T12:11:09.000000Z",
+            "image": null,
+            "image_url": null
+        },
+        "breed": {
+            "id": 1,
+            "name": "Golden Retriever",
+            "slug": "golden-retriever",
+            "species_id": 1,
+            "created_at": "2026-03-31T20:01:07.000000Z",
+            "updated_at": "2026-04-01T12:11:09.000000Z",
+            "image": null,
+            "image_url": null
+        }
+    },
+    "product_detail": null,
+    "images": [
+        {
+            "id": 1,
+            "item_id": 16,
+            "path": "products\/AerPc5GszAn3IMWg8ztVTgOw4XiwnxeH7vZlmX8P.jpg",
+            "is_primary": 1,
+            "created_at": "2026-04-03T14:19:24.000000Z",
+            "updated_at": "2026-04-03T14:19:24.000000Z"
+        },
+        {
+            "id": 2,
+            "item_id": 16,
+            "path": "products\/TolU4R18y9dwkuCse5LQsAOtTUwCBEsVwSZYgoRp.png",
+            "is_primary": 0,
+            "created_at": "2026-04-03T14:19:24.000000Z",
+            "updated_at": "2026-04-03T14:19:24.000000Z"
+        },
+        {
+            "id": 3,
+            "item_id": 16,
+            "path": "products\/Pz13KgnI3BTH1T5Aqf8wsj9TQ4zYdthnvzW2bcML.png",
+            "is_primary": 0,
+            "created_at": "2026-04-03T14:19:24.000000Z",
+            "updated_at": "2026-04-03T14:19:24.000000Z"
+        }
+    ]
+}
