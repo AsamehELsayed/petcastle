@@ -1,6 +1,6 @@
 import AdminLayout from '@/layouts/admin-layout';
 import { Head, useForm } from '@inertiajs/react';
-import { Settings, Save, Globe, Info, CreditCard, Mail, Shield } from 'lucide-react';
+import { Settings, Save, Globe, Info, CreditCard, Mail, Shield, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { type BreadcrumbItem } from '@/types';
@@ -68,17 +68,37 @@ export default function Index({ settings }: { settings: Record<string, any[]> })
                                         </CardHeader>
                                         <CardContent className="space-y-6">
                                             {groupSettings.map((setting) => (
-                                                <div key={setting.key} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                                                <div key={setting.key} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start border-b pb-6 last:border-0 last:pb-0">
                                                     <div className="space-y-1">
-                                                        <Label className="capitalize">{setting.key.replace(/_/g, ' ')}</Label>
+                                                        <Label className="capitalize text-base">{setting.key.replace(/_/g, ' ')}</Label>
                                                         <p className="text-xs text-muted-foreground">Key: {setting.key}</p>
                                                     </div>
                                                     <div className="md:col-span-2">
-                                                        <Input 
-                                                            value={data[setting.key] || ''} 
-                                                            onChange={(e) => setData(setting.key, e.target.value)}
-                                                            className="max-w-md"
-                                                        />
+                                                        {typeof data[setting.key] === 'object' && data[setting.key] !== null ? (
+                                                            <div className="space-y-4 border p-4 rounded-lg bg-slate-50/50 dark:bg-slate-900/50">
+                                                                {Object.entries(data[setting.key]).map(([subKey, subValue]) => (
+                                                                    <div key={subKey} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                                                                        <Label className="text-sm font-medium text-muted-foreground capitalize">
+                                                                            {subKey.replace(/_/g, ' ')}
+                                                                        </Label>
+                                                                        <Input 
+                                                                            value={subValue as string || ''} 
+                                                                            onChange={(e) => {
+                                                                                const newData = { ...data[setting.key], [subKey]: e.target.value };
+                                                                                setData(setting.key, newData);
+                                                                            }}
+                                                                            className="h-9 bg-white dark:bg-slate-950"
+                                                                        />
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <Input 
+                                                                value={data[setting.key] || ''} 
+                                                                onChange={(e) => setData(setting.key, e.target.value)}
+                                                                className="max-w-md"
+                                                            />
+                                                        )}
                                                     </div>
                                                 </div>
                                             ))}
@@ -95,11 +115,13 @@ export default function Index({ settings }: { settings: Record<string, any[]> })
 }
 
 function getIconForGroup(group: string) {
-    switch (group) {
-        case 'General': return <Globe className="h-4 w-4" />;
-        case 'Shipping': return <CreditCard className="h-4 w-4" />;
-        case 'Contact': return <Mail className="h-4 w-4" />;
-        case 'SEO': return <Shield className="h-4 w-4" />;
+    const normalizedGroup = group.toLowerCase();
+    switch (normalizedGroup) {
+        case 'general': return <Globe className="h-4 w-4" />;
+        case 'shipping': return <CreditCard className="h-4 w-4" />;
+        case 'contact': return <Mail className="h-4 w-4" />;
+        case 'seo': return <Shield className="h-4 w-4" />;
+        case 'whatsapp': return <MessageSquare className="h-4 w-4 text-green-500" />;
         default: return <Settings className="h-4 w-4" />;
     }
 }

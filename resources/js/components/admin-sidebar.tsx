@@ -61,6 +61,11 @@ const adminNavItems = [
         icon: FileText,
     },
     {
+        title: 'Blog',
+        url: '/admin/blog',
+        icon: MessageSquare,
+    },
+    {
         title: 'Activity Logs',
         url: '/admin/logs/activity',
         icon: Activity,

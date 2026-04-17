@@ -20,5 +20,12 @@ require __DIR__.'/admin.php';
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.show');
 
+// Blog
+Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+
+// Animal Request
+Route::post('/request-animal', [\App\Http\Controllers\AnimalRequestController::class, 'store'])->name('animal.request.store');
+
 // Dynamic CMS Pages (Must be at the end)
 Route::get('/{slug}', [\App\Http\Controllers\PageController::class, 'show'])->name('cms.page');

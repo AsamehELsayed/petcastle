@@ -47,6 +47,21 @@ class SettingSeeder extends Seeder
                     'description' => 'Buy pets and pet supplies online',
                 ],
             ],
+            [
+                'key' => 'whatsapp_enabled',
+                'group' => 'WhatsApp',
+                'value' => '1',
+            ],
+            [
+                'key' => 'whatsapp_number',
+                'group' => 'WhatsApp',
+                'value' => '+201000000000',
+            ],
+            [
+                'key' => 'whatsapp_message',
+                'group' => 'WhatsApp',
+                'value' => 'Hello! I have a question about your pets.',
+            ],
         ];
 
         foreach ($settings as $setting) {

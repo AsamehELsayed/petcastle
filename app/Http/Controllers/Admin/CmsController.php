@@ -56,6 +56,9 @@ class CmsController extends Controller
                 case 'features':
                     $data['data'] = ['title' => 'Our Features', 'features' => [['title' => 'Fast Shipping', 'description' => 'Worldwide']]];
                     break;
+                case 'animal_request_hero':
+                    $data['data'] = ['title' => 'YOU NAME IT, WE FIND IT.', 'subtitle' => 'Premium animal sourcing service', 'image' => '/images/animal_sourcing_hero.png'];
+                    break;
                 case 'text':
                 default:
                     $data['data'] = ['content' => 'Add your text here'];
@@ -69,7 +72,32 @@ class CmsController extends Controller
 
     public function updateSection(Request $request, $id)
     {
-        $this->cmsService->updateSection($id, $request->all());
+        $data = $request->all();
+        $sectionData = $data['data'] ?? [];
+
+        // Handle image uploads within the data field
+        foreach ($request->allFiles() as $key => $file) {
+            // Keys usually look like 'data.image' or 'data.card1_image'
+            if (strpos($key, 'data.') === 0) {
+                $dataKey = substr($key, 5); // remove 'data.' prefix
+                $path = $file->store('cms', 'public');
+                $sectionData[$dataKey] = '/storage/' . $path;
+            }
+        }
+
+        // Fix boolean values that might be sent as strings via FormData
+        $booleanFields = ['only_photo', 'is_full_width', 'show_overlay'];
+        foreach ($booleanFields as $field) {
+            if (isset($sectionData[$field])) {
+                $sectionData[$field] = filter_var($sectionData[$field], FILTER_VALIDATE_BOOLEAN);
+            }
+        }
+
+        $this->cmsService->updateSection($id, [
+            'data' => $sectionData,
+            'is_active' => $request->boolean('is_active', true)
+        ]);
+
         return redirect()->back()->with('success', 'Section updated successfully.');
     }
 
@@ -81,7 +109,11 @@ class CmsController extends Controller
 
     public function destroySection($id)
     {
-        $this->cmsService->deleteSection($id);
-        return redirect()->back()->with('success', 'Section deleted successfully.');
+        try {
+            $this->cmsService->deleteSection($id);
+            return redirect()->back()->with('success', 'Section deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 }

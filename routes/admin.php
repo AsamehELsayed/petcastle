@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
@@ -51,6 +52,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Logs
     Route::get('logs/activity', [LogController::class, 'activity'])->name('logs.activity');
     Route::get('logs/errors', [LogController::class, 'errors'])->name('logs.errors');
+
+    // Blog
+    Route::resource('blog', BlogPostController::class);
 
     // Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');

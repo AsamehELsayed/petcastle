@@ -77,6 +77,12 @@ export default function Index({ pages }: { pages: any[] }) {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Section deleted successfully');
+                // Manually filter local state for instant feedback
+                setSections(prev => prev.filter(s => s.id !== sectionId));
+            },
+            onError: (errors: any) => {
+                const errorMsg = Object.values(errors)[0] as string || 'Failed to delete section';
+                toast.error(errorMsg);
             }
         });
     };
@@ -205,7 +211,7 @@ export default function Index({ pages }: { pages: any[] }) {
                                                                             >
                                                                                 <Edit className="h-3.5 w-3.5 mr-1.5" /> Edit
                                                                             </Button>
-                                                                            {section.is_deletable && (
+                                                                            {(section.is_deletable !== false && section.is_deletable !== 0) && (
                                                                                 <Button 
                                                                                     size="sm" 
                                                                                     variant="ghost" 

@@ -48,6 +48,11 @@ class HandleInertiaRequests extends Middleware
             ],
             'global_categories' => Category::whereNull('parent_id')->get(),
             'global_items' => Item::where('status', 'active')->latest()->limit(50)->get(),
+            'whatsapp_settings' => [
+                'enabled' => setting('whatsapp_enabled', '0'),
+                'number' => setting('whatsapp_number', ''),
+                'message' => setting('whatsapp_message', ''),
+            ],
         ]);
     }
 }

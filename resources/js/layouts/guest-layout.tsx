@@ -4,6 +4,7 @@ import { Navbar } from "@/ecommerce/components/layout/Navbar";
 import { Footer } from "@/ecommerce/components/layout/Footer";
 import { CartDrawer } from "@/ecommerce/components/cart/CartDrawer";
 import { Toaster } from "@/components/ui/sonner";
+import { WhatsAppButton } from "@/components/whatsapp-button";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ export default function GuestLayout({ children }: { children: ReactNode }) {
                 <Footer />
                 <CartDrawer />
                 <Toaster position="top-right" />
+                <WhatsAppButton />
             </div>
         </QueryClientProvider>
     );
