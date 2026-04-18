@@ -95,7 +95,7 @@ export const columns: ColumnDef<any>[] = [
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => updateStatus('contacted')}>
                             <Mail className="mr-2 h-4 w-4" /> Mark as Contacted
-                        </MenuItem>
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => updateStatus('resolved')}>
                             <CheckCircle className="mr-2 h-4 w-4" /> Mark as Resolved
                         </DropdownMenuItem>

@@ -89,6 +89,7 @@ const adminNavItems = [
     },
 ];
 
+export function AdminSidebar() {
     const { pending_animal_requests_count } = usePage().props as any;
 
     const navItems = adminNavItems.map(item => {
