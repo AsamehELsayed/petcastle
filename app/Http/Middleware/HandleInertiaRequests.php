@@ -53,6 +53,7 @@ class HandleInertiaRequests extends Middleware
                 'number' => setting('whatsapp_number', ''),
                 'message' => setting('whatsapp_message', ''),
             ],
+            'pending_animal_requests_count' => \App\Models\AnimalRequest::where('status', 'pending')->count(),
         ]);
     }
 }

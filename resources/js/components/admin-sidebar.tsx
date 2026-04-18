@@ -2,6 +2,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Link } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { 
     LayoutDashboard, 
     Package, 
@@ -14,7 +15,8 @@ import {
     FileText, 
     Activity, 
     Settings,
-    AlertCircle
+    AlertCircle,
+    PawPrint
 } from 'lucide-react';
 import AppLogo from './app-logo';
 
@@ -66,6 +68,11 @@ const adminNavItems = [
         icon: MessageSquare,
     },
     {
+        title: 'Animal Requests',
+        url: '/admin/animal-requests',
+        icon: PawPrint,
+    },
+    {
         title: 'Activity Logs',
         url: '/admin/logs/activity',
         icon: Activity,
@@ -82,7 +89,15 @@ const adminNavItems = [
     },
 ];
 
-export function AdminSidebar() {
+    const { pending_animal_requests_count } = usePage().props as any;
+
+    const navItems = adminNavItems.map(item => {
+        if (item.title === 'Animal Requests' && pending_animal_requests_count > 0) {
+            return { ...item, count: pending_animal_requests_count };
+        }
+        return item;
+    });
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -98,7 +113,7 @@ export function AdminSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={adminNavItems} />
+                <NavMain items={navItems} />
             </SidebarContent>
 
             <SidebarFooter>

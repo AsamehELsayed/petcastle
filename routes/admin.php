@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AnimalRequestController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
@@ -55,6 +56,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Blog
     Route::resource('blog', BlogPostController::class);
+
+    // Animal Requests
+    Route::resource('animal-requests', AnimalRequestController::class)->only(['index', 'update', 'destroy']);
 
     // Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
