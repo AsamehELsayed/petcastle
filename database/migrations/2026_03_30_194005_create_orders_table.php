@@ -19,6 +19,27 @@ return new class extends Migration
                 $table->string('phone')->nullable();
                 $table->timestamps();
             });
+        } else {
+            Schema::table('orders', function (Blueprint $table) {
+                if (!Schema::hasColumn('orders', 'user_id')) {
+                    $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
+                }
+                if (!Schema::hasColumn('orders', 'address_id')) {
+                    $table->foreignId('address_id')->nullable()->constrained('addresses')->nullOnDelete();
+                }
+                if (!Schema::hasColumn('orders', 'total_price')) {
+                    $table->decimal('total_price', 10, 2)->after('user_id');
+                }
+                if (!Schema::hasColumn('orders', 'status')) {
+                    $table->enum('status', ['pending', 'paid', 'shipped', 'delivered', 'cancelled'])->default('pending')->index();
+                }
+                if (!Schema::hasColumn('orders', 'payment_method')) {
+                    $table->string('payment_method')->nullable();
+                }
+                if (!Schema::hasColumn('orders', 'phone')) {
+                    $table->string('phone')->nullable();
+                }
+            });
         }
     }
 

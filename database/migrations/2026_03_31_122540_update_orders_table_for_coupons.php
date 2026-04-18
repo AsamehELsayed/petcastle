@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreignId('coupon_id')->nullable()->constrained('coupons')->nullOnDelete();
-            $table->decimal('discount_amount', 10, 2)->default(0)->after('total_price');
+            if (!Schema::hasColumn('orders', 'coupon_id')) {
+                $table->foreignId('coupon_id')->nullable()->constrained('coupons')->nullOnDelete();
+            }
+            if (!Schema::hasColumn('orders', 'discount_amount')) {
+                $table->decimal('discount_amount', 10, 2)->default(0);
+            }
         });
     }
 
