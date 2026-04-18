@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blog_posts', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('excerpt')->nullable();
-            $table->longText('content');
-            $table->string('featured_image')->nullable();
-            $table->boolean('is_published')->default(false);
-            $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
-            $table->timestamp('published_at')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('blog_posts')) {
+            Schema::create('blog_posts', function (Blueprint $table) {
+                $table->id();
+                $table->string('title');
+                $table->string('slug')->unique();
+                $table->text('excerpt')->nullable();
+                $table->longText('content');
+                $table->string('featured_image')->nullable();
+                $table->boolean('is_published')->default(false);
+                $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
+                $table->timestamp('published_at')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('animal_requests', function (Blueprint $blueprint) {
-            $blueprint->id();
-            $blueprint->string('name');
-            $blueprint->string('contact');
-            $blueprint->string('animal_type');
-            $blueprint->text('description');
-            $blueprint->string('status')->default('pending'); // pending, contacted, resolved
-            $blueprint->timestamps();
-        });
+        if (!Schema::hasTable('animal_requests')) {
+            Schema::create('animal_requests', function (Blueprint $blueprint) {
+                $blueprint->id();
+                $blueprint->string('name');
+                $blueprint->string('contact');
+                $blueprint->string('animal_type');
+                $blueprint->text('description');
+                $blueprint->string('status')->default('pending'); // pending, contacted, resolved
+                $blueprint->timestamps();
+            });
+        }
     }
 
     /**
