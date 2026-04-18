@@ -27,16 +27,20 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->reportable(function (\Throwable $e) {
             try {
-                \App\Models\ErrorLog::create([
-                    'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'stack_trace' => $e->getTraceAsString(),
-                    'user_id' => auth()->id(),
-                    'url' => request()->fullUrl(),
-                    'method' => request()->method(),
-                    'ip_address' => request()->ip(),
-                ]);
+                // Check if the error_logs table exists before attempting to write
+                // to prevent crashes during early migration phases.
+                if (\Illuminate\Support\Facades\Schema::hasTable('error_logs')) {
+                    \App\Models\ErrorLog::create([
+                        'message' => $e->getMessage(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                        'stack_trace' => $e->getTraceAsString(),
+                        'user_id' => auth()->id(),
+                        'url' => request()->fullUrl(),
+                        'method' => request()->method(),
+                        'ip_address' => request()->ip(),
+                    ]);
+                }
             } catch (\Throwable $th) {
                 // Prevent infinite loop if database logging fails
             }
