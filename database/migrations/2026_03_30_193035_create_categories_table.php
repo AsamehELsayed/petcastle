@@ -12,6 +12,15 @@ return new class extends Migration {
                 $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete();
                 $table->timestamps();
             });
+        } else {
+            Schema::table('categories', function (Blueprint $table) {
+                if (!Schema::hasColumn('categories', 'name')) {
+                    $table->string('name')->after('id');
+                }
+                if (!Schema::hasColumn('categories', 'parent_id')) {
+                    $table->foreignId('parent_id')->nullable()->after('name')->constrained('categories')->nullOnDelete();
+                }
+            });
         }
     }
     public function down(): void {
