@@ -13,31 +13,43 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->string('slug')->unique()->after('name')->nullable();
+            if (!Schema::hasColumn('categories', 'slug')) {
+                $table->string('slug')->unique()->after('name')->nullable();
+            }
         });
 
         Schema::table('species', function (Blueprint $table) {
-            $table->string('slug')->unique()->after('name')->nullable();
+            if (!Schema::hasColumn('species', 'slug')) {
+                $table->string('slug')->unique()->after('name')->nullable();
+            }
         });
 
         Schema::table('breeds', function (Blueprint $table) {
-            $table->string('slug')->after('name')->nullable();
+            if (!Schema::hasColumn('breeds', 'slug')) {
+                $table->string('slug')->after('name')->nullable();
+            }
         });
 
-        // Populate existing records
-        \App\Models\Category::all()->each(fn($c) => $c->update(['slug' => Str::slug($c->name)]));
-        \App\Models\Species::all()->each(fn($s) => $s->update(['slug' => Str::slug($s->name)]));
-        \App\Models\Breed::all()->each(fn($b) => $b->update(['slug' => Str::slug($b->name)]));
+        // Populate existing records only if slug was just added or is empty
+        \App\Models\Category::all()->whereNull('slug')->each(fn($c) => $c->update(['slug' => Str::slug($c->name)]));
+        \App\Models\Species::all()->whereNull('slug')->each(fn($s) => $s->update(['slug' => Str::slug($s->name)]));
+        \App\Models\Breed::all()->whereNull('slug')->each(fn($b) => $b->update(['slug' => Str::slug($b->name)]));
 
-        // Now make them not nullable
+        // Now make them not nullable if they were just made available
         Schema::table('categories', function (Blueprint $table) {
-            $table->string('slug')->nullable(false)->change();
+            if (Schema::hasColumn('categories', 'slug')) {
+                $table->string('slug')->nullable(false)->change();
+            }
         });
         Schema::table('species', function (Blueprint $table) {
-            $table->string('slug')->nullable(false)->change();
+            if (Schema::hasColumn('species', 'slug')) {
+                $table->string('slug')->nullable(false)->change();
+            }
         });
         Schema::table('breeds', function (Blueprint $table) {
-            $table->string('slug')->nullable(false)->change();
+            if (Schema::hasColumn('breeds', 'slug')) {
+                $table->string('slug')->nullable(false)->change();
+            }
         });
     }
 
