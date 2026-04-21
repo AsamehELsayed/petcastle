@@ -15,9 +15,16 @@ return new class extends Migration
         Schema::dropIfExists('coupon_usages');
 
         // 2. Remove coupon related columns and foreign keys from orders table
-        Schema::table('orders', function (Blueprint $table) {
+        $foreignKeys = Schema::getForeignKeys('orders');
+        $hasCouponFk = collect($foreignKeys)->contains(function ($fk) {
+            return in_array('coupon_id', $fk['columns']) || $fk['name'] === 'orders_coupon_id_foreign';
+        });
+
+        Schema::table('orders', function (Blueprint $table) use ($hasCouponFk) {
             if (Schema::hasColumn('orders', 'coupon_id')) {
-                $table->dropForeign(['coupon_id']);
+                if ($hasCouponFk) {
+                    $table->dropForeign(['coupon_id']);
+                }
                 $table->dropColumn('coupon_id');
             }
             if (Schema::hasColumn('orders', 'discount_amount')) {
