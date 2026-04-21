@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { router } from "@inertiajs/react";
-import { Layout, Type, Star, ShoppingBag, Ticket, PawPrint, LayoutGrid, CreditCard, Play, Grid, ShieldCheck, Code } from "lucide-react";
+import { Layout, Type, Star, ShoppingBag, PawPrint, LayoutGrid, CreditCard, Play, Grid, ShieldCheck, Code } from "lucide-react";
 import { toast } from "sonner";
 
 interface Props {
@@ -13,7 +13,6 @@ interface Props {
 const sectionTypes = [
     { type: 'hero', label: 'Hero Section', description: 'Large headline with background image and CTA buttons', icon: Layout },
     { type: 'ecommerce_hero', label: 'Ecommerce Hero', description: 'Premium gradient hero with product feature and badges', icon: ShoppingBag },
-    { type: 'coupon_strip', label: 'Coupon Strip', description: 'Highlight a promo code with a dashed border strip', icon: Ticket },
     { type: 'shop_by_pet', label: 'Shop by Pet', description: 'Grid of pet species/species categories', icon: PawPrint },
     { type: 'shop_by_category', label: 'Shop by Category', description: 'Visual grid of product categories', icon: LayoutGrid },
     { type: 'promo_cards', label: 'Promo Cards', description: 'Two large side-by-side promotional cards', icon: CreditCard },

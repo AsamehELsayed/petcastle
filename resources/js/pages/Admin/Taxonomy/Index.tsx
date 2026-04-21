@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/layouts/admin-layout';
 import { Head, useForm } from '@inertiajs/react';
-import { Plus, Trash, Edit, Tags, Target, Dog, Award } from 'lucide-react';
+import { Plus, Trash, Edit, Tags, Target, Dog, Award, ArrowLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { type BreadcrumbItem } from '@/types';
@@ -24,6 +24,7 @@ export default function Index({ categories, brands, species }: { categories: any
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<any>(null);
     const [activeType, setActiveType] = useState<string>('category');
+    const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | null>(null);
 
     const handleAdd = (type: string) => {
         setActiveType(type);
@@ -93,15 +94,94 @@ export default function Index({ categories, brands, species }: { categories: any
                     </TabsContent>
                     
                     <TabsContent value="breeds" className="mt-8 focus-visible:outline-none">
-                        <TaxonomyTable 
-                            title="Breeds" 
-                            items={species.flatMap((s: any) => s.breeds.map((b: any) => ({ ...b, species_name: s.name })))} 
-                            species={species}
-                            type="breed" 
-                            extraColumns={['Species']}
-                            onAdd={() => handleAdd('breed')} 
-                            onEdit={(item) => handleEdit('breed', item)} 
-                        />
+                        <AnimatePresence mode="wait">
+                            {selectedSpeciesId === null ? (
+                                <motion.div 
+                                    key="species-grid"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                                >
+                                    {species.map((s: any) => (
+                                        <button
+                                            key={s.id}
+                                            onClick={() => setSelectedSpeciesId(s.id)}
+                                            className="group relative flex flex-col text-left bg-card hover:bg-muted/50 border border-border/50 hover:border-primary/50 rounded-2xl p-6 transition-all shadow-sm hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+                                        >
+                                            <div className="flex items-center gap-4 mb-4">
+                                                <div className="h-14 w-14 rounded-xl overflow-hidden bg-primary/5 border border-primary/10 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                                                    {s.image_url ? (
+                                                        <img src={s.image_url} alt={s.name} className="h-full w-full object-cover" />
+                                                    ) : (
+                                                        <Dog className="h-6 w-6 text-primary/40" />
+                                                    )}
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <h3 className="text-xl font-bold tracking-tight text-foreground">{s.name}</h3>
+                                                    <span className="text-sm font-semibold text-muted-foreground">
+                                                        {s.breeds?.length || 0} Breeds
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="mt-auto flex items-center gap-2 text-sm font-bold text-primary opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                                                Browse Breeds <ChevronRight className="h-4 w-4" />
+                                            </div>
+
+                                            {/* Decorative Background Icon */}
+                                            <div className="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity rotate-12">
+                                                <Dog className="h-32 w-32" />
+                                            </div>
+                                        </button>
+                                    ))}
+                                    
+                                    {/* Quick Add Breed Box */}
+                                    <button
+                                        onClick={() => handleAdd('breed')}
+                                        className="flex flex-col items-center justify-center border-2 border-dashed border-border/60 hover:border-primary/40 rounded-2xl p-8 transition-all hover:bg-primary/5 group"
+                                    >
+                                        <div className="h-14 w-14 rounded-full bg-muted group-hover:bg-primary/10 flex items-center justify-center mb-3 transition-colors">
+                                            <Plus className="h-6 w-6 text-muted-foreground group-hover:text-primary" />
+                                        </div>
+                                        <span className="font-bold text-muted-foreground group-hover:text-primary">Add New Breed</span>
+                                    </button>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="breeds-table"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    className="space-y-6"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            onClick={() => setSelectedSpeciesId(null)}
+                                            className="rounded-xl gap-2 font-bold hover:bg-muted"
+                                        >
+                                            <ArrowLeft className="h-4 w-4" /> Back to Species
+                                        </Button>
+                                        <div className="h-4 w-[1px] bg-border/60" />
+                                        <h2 className="text-xl font-bold">
+                                            {species.find(s => s.id === selectedSpeciesId)?.name} Breeds
+                                        </h2>
+                                    </div>
+
+                                    <TaxonomyTable 
+                                        title="Breeds" 
+                                        items={species.find((s: any) => s.id === selectedSpeciesId)?.breeds.map((b: any) => ({ ...b, species_name: species.find(s => s.id === selectedSpeciesId)?.name })) || []} 
+                                        species={species}
+                                        type="breed" 
+                                        extraColumns={['Species']}
+                                        onAdd={() => handleAdd('breed')} 
+                                        onEdit={(item) => handleEdit('breed', item)} 
+                                    />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </TabsContent>
                 </Tabs>
             </div>
@@ -110,6 +190,7 @@ export default function Index({ categories, brands, species }: { categories: any
                 type={activeType} 
                 item={editingItem} 
                 species={species} 
+                selectedSpeciesId={selectedSpeciesId}
                 isOpen={isDialogOpen} 
                 onOpenChange={setIsDialogOpen} 
             />
@@ -121,12 +202,14 @@ function TaxonomyDialog({
     type, 
     item, 
     species, 
+    selectedSpeciesId,
     isOpen, 
     onOpenChange 
 }: { 
     type: string, 
     item?: any, 
     species: any[], 
+    selectedSpeciesId?: number | null,
     isOpen: boolean, 
     onOpenChange: (open: boolean) => void 
 }) {
@@ -134,7 +217,7 @@ function TaxonomyDialog({
     const { data, setData, post, put, processing, errors, reset, transform } = useForm({
         id: item?.id || null,
         name: item?.name || '',
-        species_id: item?.species_id || '',
+        species_id: item?.species_id || (type === 'breed' && selectedSpeciesId ? selectedSpeciesId.toString() : ''),
         type: type,
         image: null as File | null,
     });
@@ -144,7 +227,7 @@ function TaxonomyDialog({
             setData({
                 id: item?.id || null,
                 name: item?.name || '',
-                species_id: item?.species_id?.toString() || '',
+                species_id: item?.species_id?.toString() || (type === 'breed' && selectedSpeciesId ? selectedSpeciesId.toString() : ''),
                 type: type,
                 image: null,
             });

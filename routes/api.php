@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\CmsController;
-use App\Http\Controllers\Api\CouponController;
 
 use App\Http\Controllers\Api\InventoryController;
 use App\Http\Controllers\Api\OrderController;
@@ -16,8 +15,6 @@ Route::middleware('auth:sanctum')->put('/settings/{key}', [SettingController::cl
 Route::get('/pages/{slug}', [CmsController::class, 'getPage']);
 Route::get('/sections/global', [CmsController::class, 'getGlobalSections']);
 
-// Discounts & Coupons
-Route::post('/apply-coupon', [CouponController::class, 'applyCoupon']);
 
 
 
@@ -26,5 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/items/{id}/stock', [InventoryController::class, 'updateStock']);
     Route::get('/inventory/logs', [InventoryController::class, 'index']);
     Route::get('/inventory/low-stock', [InventoryController::class, 'lowStockAlerts']);
+    Route::get('/addresses', [\App\Http\Controllers\Api\AddressController::class, 'index']);
+    Route::post('/addresses', [\App\Http\Controllers\Api\AddressController::class, 'store']);
     Route::post('/checkout', [OrderController::class, 'checkout']);
 });

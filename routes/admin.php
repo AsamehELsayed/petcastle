@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\CouponController;
 
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -28,8 +27,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Users
     Route::resource('users', UserController::class)->only(['index', 'show', 'update']);
 
-    // Coupons
-    Route::resource('coupons', CouponController::class);
 
 
 

@@ -11,6 +11,7 @@ Route::middleware(['auth', 'customer'])->prefix('portal')->name('portal.')->grou
     Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout');
 });
 
 require __DIR__.'/settings.php';
@@ -25,6 +26,7 @@ Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->nam
 Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
 
 // Animal Request
+Route::get('/request-animal', [\App\Http\Controllers\AnimalRequestController::class, 'index'])->name('animal.request.create');
 Route::post('/request-animal', [\App\Http\Controllers\AnimalRequestController::class, 'store'])->name('animal.request.store');
 
 // Dynamic CMS Pages (Must be at the end)

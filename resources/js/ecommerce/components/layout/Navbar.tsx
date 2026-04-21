@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
-import { Search, ShoppingCart, User, Heart, MapPin, Menu, X } from "lucide-react";
+import { Search, ShoppingCart, User, Heart, MapPin, Menu, X, PawPrint, BookText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/ecommerce/store/useCart";
 
 const logoImg = `/images/logo.jpg`;
 
 export function Navbar({ categories: propCategories, items: propItems }: { categories?: any[], items?: any[] }) {
-  const { global_categories = [], global_items = [] } = usePage().props as any;
+  const { auth, global_categories = [], global_items = [] } = usePage().props as any;
+  const user = auth?.user;
   const dbCategories = propCategories || global_categories;
   const dbItems = propItems || global_items;
+
+  const getUserRedirect = () => {
+    if (!user) return "/login";
+    return user.role === 'admin' ? "/admin" : "/portal";
+  };
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -34,11 +40,7 @@ export function Navbar({ categories: propCategories, items: propItems }: { categ
   return (
     <header className="sticky top-0 z-50 w-full flex flex-col bg-blue-700 text-white max-w-full overflow-x-hidden">
       {/* Top Promo Bar */}
-      <div className="bg-primary text-primary-foreground text-xs font-medium py-1.5 px-4 overflow-hidden relative flex items-center justify-center">
-        <div className="max-w-7xl mx-auto w-full flex justify-center text-center items-center overflow-hidden">
-          <p className="animate-pulse px-4">🎉 WOW Sale — Up to 70% OFF | Use code <span className="text-accent font-bold">PETS10</span> for extra 10% off | Free delivery above 20 JD</p>
-        </div>
-      </div>
+     
 
       {/* Main Navbar */}
       <div className={`bg-white transition-all duration-300 ${isScrolled ? "shadow-md" : "border-b border-border"}`}>
@@ -111,9 +113,12 @@ export function Navbar({ categories: propCategories, items: propItems }: { categ
                 <Heart className="w-6 h-6" />
               </button>
               
-              <button className="p-2 text-foreground hover:text-primary transition-colors relative hidden sm:block">
+              <Link 
+                href={getUserRedirect()}
+                className="p-2 text-foreground hover:text-primary transition-colors relative hidden sm:block"
+              >
                 <User className="w-6 h-6" />
-              </button>
+              </Link>
               
               <button 
                 onClick={() => setIsOpen(true)}
@@ -157,6 +162,24 @@ export function Navbar({ categories: propCategories, items: propItems }: { categ
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link 
+                  href="/blog"
+                  className="text-sm font-bold text-primary hover:text-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-accent hover:after:w-full after:transition-all after:duration-300 flex items-center gap-1"
+                >
+                  <BookText className="w-4 h-4" />
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/request-animal"
+                  className="text-sm font-bold text-primary hover:text-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-accent hover:after:w-full after:transition-all after:duration-300 flex items-center gap-1 text-accent"
+                >
+                  <PawPrint className="w-4 h-4" />
+                  Request a Pet
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -196,6 +219,14 @@ export function Navbar({ categories: propCategories, items: propItems }: { categ
                   <div className="space-y-1">
                     <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="block py-4 px-5 rounded-2xl text-lg font-bold text-foreground hover:bg-primary/5 hover:text-primary transition-all">Home</Link>
                     <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="block py-4 px-5 rounded-2xl text-lg font-bold text-foreground hover:bg-primary/5 hover:text-primary transition-all">All Collections</Link>
+                    <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)} className="block py-4 px-5 rounded-2xl text-lg font-bold text-foreground hover:bg-primary/5 hover:text-primary transition-all flex items-center gap-2">
+                        <BookText className="w-5 h-5 text-primary" />
+                        Blog
+                    </Link>
+                    <Link href="/request-animal" onClick={() => setIsMobileMenuOpen(false)} className="block py-4 px-5 rounded-2xl text-lg font-bold text-accent hover:bg-primary/5 transition-all flex items-center gap-2">
+                        <PawPrint className="w-5 h-5" />
+                        Request a Pet
+                    </Link>
                   </div>
                 </div>
 

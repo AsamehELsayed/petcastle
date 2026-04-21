@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { CheckCircle2, PawPrint, Mail, User, Info, MessageSquare } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
+import { AnimalRequestHero } from "@/ecommerce/components/sections/AnimalRequestHero";
+import { AnimalRequestForm } from "@/ecommerce/components/sections/AnimalRequestForm";
 
 const logoImg = `/images/logo.jpg`;
 
@@ -84,7 +85,7 @@ export default function EcommerceHome({
           {/* STATIC HERO SECTION */}
           {(() => {
               const sourcingHero = page?.active_sections?.find((s: any) => s.type === 'animal_request_hero');
-              return <AnimalRequestHeroBlock data={sourcingHero?.data || {}} />;
+              return <AnimalRequestHero data={sourcingHero?.data || {}} />;
           })()}
 
           {page?.active_sections && page.active_sections.length > 0 ? (
@@ -149,8 +150,7 @@ function SectionRenderer({ section, context }: { section: any, context: any }) {
         case 'html': BlockComponent = <HtmlBlock data={data} />; break;
         
         case 'ecommerce_hero': BlockComponent = <EcommerceHeroBlock data={data} items={context.items} animals={context.animals} />; isFullWidthLayout = true; break;
-        case 'animal_request_hero': BlockComponent = <AnimalRequestHeroBlock data={data} />; isFullWidthLayout = true; break;
-        case 'coupon_strip': BlockComponent = <CouponStripBlock data={data} />; isFullWidthLayout = true; break;
+        case 'animal_request_hero': BlockComponent = <AnimalRequestHero data={data} />; isFullWidthLayout = true; break;
         case 'shop_by_pet': BlockComponent = <ShopByPetBlock data={data} species={context.species} items={context.items} animals={context.animals} />; isFullWidthLayout = true; break;
         case 'shop_by_category': BlockComponent = <ShopByCategoryBlock data={data} categories={context.categories} items={context.items} />; isFullWidthLayout = true; break;
         case 'promo_cards': BlockComponent = <PromoCardsBlock data={data} items={context.items} />; isFullWidthLayout = true; break;
@@ -275,206 +275,10 @@ export function EcommerceHeroBlock({ data, items, animals }: { data: any, items:
   );
 }
 
-export function AnimalRequestForm() {
-    const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
-        name: "",
-        contact: "",
-        animal_type: "",
-        description: "",
-    });
+// Components moved to separate files:
+// AnimalRequestForm
+// AnimalRequestHeroBlock (renamed to AnimalRequestHero)
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        post(route('animal.request.store'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                reset();
-                toast.success("Request sent successfully!");
-            },
-        });
-    };
-
-    return (
-        <section id="animal-request-form" className="py-20 bg-background overflow-hidden relative border-y border-border">
-            {/* Colorful Accents */}
-            <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-primary/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
-            
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col lg:flex-row gap-16 items-center">
-                <div className="flex-1 text-center lg:text-left">
-                    <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5 mb-6 text-primary text-xs font-black uppercase tracking-widest">
-                        Don't see your dream pet?
-                    </div>
-                    <h2 className="text-4xl md:text-6xl font-display font-black text-[#1E3A8A] mb-6 leading-[1.1]">
-                        Request Your <br/>
-                        <span className="text-accent underline decoration-accent/20 decoration-8 underline-offset-4">Dream Animal</span>
-                    </h2>
-                    <p className="text-muted-foreground text-xl max-w-xl mx-auto lg:mx-0">
-                        Our sourcing experts specialize in finding the world's most beautiful and rare animals. 
-                        Tell us what you're looking for!
-                    </p>
-                </div>
-
-                <div className="flex-1 w-full max-w-xl">
-                    <div className="bg-white rounded-3xl p-8 md:p-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-border relative overflow-hidden group">
-                        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary via-accent to-primary" />
-                        
-                        <AnimatePresence mode="wait">
-                            {recentlySuccessful ? (
-                                <motion.div 
-                                    key="success"
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="py-12 flex flex-col items-center text-center"
-                                >
-                                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                                        <CheckCircle2 className="w-10 h-10 text-green-600" />
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-foreground mb-2">Request Shared!</h3>
-                                    <p className="text-muted-foreground">We'll get back to you within 24 hours.</p>
-                                </motion.div>
-                            ) : (
-                                <form onSubmit={handleSubmit} className="space-y-5">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                        <div className="space-y-1.5">
-                                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Full Name</label>
-                                            <div className="relative">
-                                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                                                <Input 
-                                                    value={data.name}
-                                                    onChange={e => setData('name', e.target.value)}
-                                                    placeholder="Enter name"
-                                                    className="pl-10 h-12 bg-muted/50 border-border focus:ring-primary"
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-1.5">
-                                            <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Contact Info</label>
-                                            <div className="relative">
-                                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                                                <Input 
-                                                    value={data.contact}
-                                                    onChange={e => setData('contact', e.target.value)}
-                                                    placeholder="Email or Phone"
-                                                    className="pl-10 h-12 bg-muted/50 border-border focus:ring-primary"
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-1.5">
-                                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Desired animal</label>
-                                        <div className="relative">
-                                            <PawPrint className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                                            <Input 
-                                                value={data.animal_type}
-                                                onChange={e => setData('animal_type', e.target.value)}
-                                                placeholder="What are you looking for?"
-                                                className="pl-10 h-12 bg-muted/50 border-border focus:ring-primary"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-1.5">
-                                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Additional details</label>
-                                        <Textarea 
-                                            value={data.description}
-                                            onChange={e => setData('description', e.target.value)}
-                                            placeholder="Tell us more about your ideal pet..."
-                                            className="bg-muted/50 border-border focus:ring-primary min-h-[80px]"
-                                            required
-                                        />
-                                    </div>
-
-                                    <Button 
-                                        type="submit" 
-                                        disabled={processing}
-                                        className="w-full h-14 bg-[#1E3A8A] hover:bg-primary/90 text-white font-black rounded-xl shadow-xl shadow-primary/10 transition-all hover:scale-[1.02]"
-                                    >
-                                        {processing ? "SUBMITTING..." : "SEND SOURCING REQUEST"}
-                                    </Button>
-                                </form>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-export function AnimalRequestHeroBlock({ data }: { data: any }) {
-  return (
-    <div className="relative w-full overflow-hidden min-h-[400px] lg:min-h-[550px] flex items-center bg-[#1E3A8A]">
-      {/* Vibrant Background Pattern & Image */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A8A] via-[#1E40AF] to-[#3B82F6]" />
-      <div className="absolute inset-0">
-        <img 
-          src={data?.image || "/images/animal_sourcing_vibrant.png"} 
-          alt="Animal Sourcing" 
-          className="w-full h-full object-cover mix-blend-overlay opacity-50"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A8A] via-transparent to-transparent" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-16">
-        <div className="max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-5 py-2 mb-6 text-white text-sm font-black tracking-[0.2em] uppercase shadow-xl">
-              Castle Pets Premium Sourcing
-            </div>
-            
-            <h1 className="text-5xl md:text-8xl font-display font-black text-white leading-[0.85] mb-6 tracking-tighter drop-shadow-2xl">
-              YOU NAME IT,<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-accent">WE FIND IT.</span>
-            </h1>
-            
-            <p className="text-lg md:text-2xl text-white/90 font-medium mb-10 leading-relaxed max-w-2xl drop-shadow-md">
-              We specialize in sourcing <span className="text-white font-bold border-b-4 border-accent">any animal of any type</span> you love. 
-              Safe, professional, and world-class delivery.
-            </p>
-
-            <div className="flex flex-wrap gap-6">
-                <Button size="lg" className="h-16 px-10 bg-accent text-white font-black text-xl rounded-2xl hover:scale-105 transition-all shadow-[0_15px_40px_rgba(249,115,22,0.6)] border-none group" onClick={() => {
-                    document.getElementById('animal-request-form')?.scrollIntoView({ behavior: 'smooth' });
-                }}>
-                    GET STARTED
-                    <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform" />
-                </Button>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function CouponStripBlock({ data }: { data: any }) {
-  return (
-    <div className="bg-[#EDE9FE] py-4 md:py-6 border-b border-[#DDD6FE]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center justify-center md:justify-between gap-4">
-          <h3 className="text-xl md:text-2xl font-black text-primary text-center md:text-left">
-              {data?.title_start || 'GET'} <span className="text-accent">{data?.promo_highlight || '15% OFF'}</span> {data?.title_end || 'ON YOUR FIRST ORDER'}
-          </h3>
-          <div className="flex items-center bg-white border-2 border-dashed border-primary rounded-xl px-6 py-3 shadow-sm relative overflow-hidden group hover:border-accent transition-colors">
-            <span className="font-bold text-muted-foreground mr-3">CODE:</span>
-            <span className="font-black text-xl text-primary group-hover:text-accent transition-colors">{data?.code || 'NEW15'}</span>
-            <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#EDE9FE] rounded-full border-r-2 border-primary" />
-            <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#EDE9FE] rounded-full border-l-2 border-primary" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export function ShopByPetBlock({ data, species, items, animals }: { data: any, species: any[], items: any[], animals: any[] }) {
   return (

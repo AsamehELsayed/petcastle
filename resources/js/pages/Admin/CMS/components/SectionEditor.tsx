@@ -277,28 +277,6 @@ export default function SectionEditor({ section, isOpen, onClose }: Props) {
         </div>
     );
 
-    const renderCouponStripEditor = () => (
-        <div className="space-y-4">
-            <div className="grid grid-cols-3 gap-2">
-                <div className="space-y-2">
-                    <Label>Title Start</Label>
-                    <Input value={data.title_start || ''} onChange={(e) => updateData('title_start', e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                    <Label>Highlight</Label>
-                    <Input value={data.promo_highlight || ''} onChange={(e) => updateData('promo_highlight', e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                    <Label>Title End</Label>
-                    <Input value={data.title_end || ''} onChange={(e) => updateData('title_end', e.target.value)} />
-                </div>
-            </div>
-            <div className="space-y-2">
-                <Label>Coupon Code</Label>
-                <Input value={data.code || ''} onChange={(e) => updateData('code', e.target.value)} />
-            </div>
-        </div>
-    );
 
     const renderCollectionEditor = () => (
         <div className="space-y-4">
@@ -534,7 +512,6 @@ export default function SectionEditor({ section, isOpen, onClose }: Props) {
                                     {section?.type === 'features' && renderFeaturesEditor()}
                                     {section?.type === 'text' && renderTextEditor()}
                                     {section?.type === 'ecommerce_hero' && renderEcommerceHeroEditor()}
-                                    {section?.type === 'coupon_strip' && renderCouponStripEditor()}
                                     {(section?.type === 'shop_by_pet' || section?.type === 'shop_by_category' || section?.type === 'deals_slider' || section?.type === 'trending_grid') && renderCollectionEditor()}
                                     {section?.type === 'promo_cards' && renderPromoCardsEditor()}
                                     {section?.type === 'trust_banner' && renderTrustBannerEditor()}

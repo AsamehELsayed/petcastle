@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "@/ecommerce/store/useCart";
+import { Link } from "@inertiajs/react";
 
 export function CartDrawer() {
   const { items, isOpen, setIsOpen, updateQuantity, removeItem, getTotals } = useCart();
@@ -142,10 +143,14 @@ export function CartDrawer() {
                   </div>
                 </div>
 
-                <button className="w-full py-4 bg-accent text-white rounded-xl font-bold text-lg hover:bg-accent/90 shadow-lg shadow-accent/25 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
+                <Link 
+                  href="/checkout"
+                  onClick={() => setIsOpen(false)}
+                  className="w-full py-4 bg-accent text-white rounded-xl font-bold text-lg hover:bg-accent/90 shadow-lg shadow-accent/25 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2"
+                >
                   Proceed to Checkout
                   <ArrowRight className="w-5 h-5" />
-                </button>
+                </Link>
               </div>
             )}
           </motion.div>

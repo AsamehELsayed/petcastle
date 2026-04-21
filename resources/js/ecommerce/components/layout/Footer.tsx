@@ -8,9 +8,37 @@ interface Category {
 }
 
 export function Footer() {
-  const { global_categories = [] } = usePage().props as { global_categories?: Category[] };
+  const { global_categories = [], footer_settings } = usePage().props as any;
+  
   const categories = global_categories.length > 0 ? global_categories : [{ id: 1, name: "Dogs" }, { id: 2, name: "Cats" }, { id: 3, name: "Small Pets" }, { id: 4, name: "Birds" }];
   
+  const branding = footer_settings?.branding || {
+    logo_text: "Pet Castle",
+    description: "Premium care for your royal companions. The ultimate destination for top-quality pet food, accessories, and healthcare products."
+  };
+
+  const social = footer_settings?.social || {
+    facebook: "#",
+    instagram: "#",
+    twitter: "#",
+    youtube: "#"
+  };
+
+  const contact = footer_settings?.contact || {
+    address: "123 Pet Castle Avenue, Royal Pet District, New Delhi 110001",
+    phone: "+91 98765 43210",
+    email: "support@petcastle.com"
+  };
+
+  const copyright = footer_settings?.copyright || `© ${new Date().getFullYear()} Pet Castle. All rights reserved. Built with love for pets.`;
+
+  const socialIcons = [
+    { Icon: Facebook, link: social.facebook },
+    { Icon: Instagram, link: social.instagram },
+    { Icon: Twitter, link: social.twitter },
+    { Icon: Youtube, link: social.youtube },
+  ];
+
   return (
     <footer className="bg-[#0F172A] pt-16 pb-8 border-t border-white/10 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,15 +51,15 @@ export function Footer() {
                 <CrownLogo className="w-6 h-6" />
               </div>
               <span className="font-display font-black text-2xl tracking-tight">
-                Pet Castle
+                {branding.logo_text}
               </span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
-              Premium care for your royal companions. The ultimate destination for top-quality pet food, accessories, and healthcare products.
+              {branding.description}
             </p>
             <div className="flex items-center gap-4 pt-2">
-              {[Facebook, Instagram, Twitter, Youtube].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-accent hover:-translate-y-1 transition-all duration-300">
+              {socialIcons.map(({Icon, link}, i) => (
+                <a key={i} href={link || "#"} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-accent hover:-translate-y-1 transition-all duration-300">
                   <Icon className="w-5 h-5" />
                 </a>
               ))}
@@ -73,15 +101,15 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-muted-foreground text-sm">
                 <MapPin className="w-5 h-5 text-accent shrink-0" />
-                <span>123 Pet Castle Avenue, Royal Pet District, New Delhi 110001</span>
+                <span>{contact.address}</span>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
                 <Phone className="w-5 h-5 text-accent shrink-0" />
-                <span>+91 98765 43210</span>
+                <span>{contact.phone}</span>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
                 <Mail className="w-5 h-5 text-accent shrink-0" />
-                <span>support@petcastle.com</span>
+                <span>{contact.email}</span>
               </li>
             </ul>
           </div>
@@ -90,7 +118,7 @@ export function Footer() {
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm text-center md:text-left">
-            &copy; {new Date().getFullYear()} Pet Castle. All rights reserved. Built with love for pets.
+            {copyright}
           </p>
           <div className="flex items-center gap-2 text-white/30 text-sm">
             <span>Powered by</span>

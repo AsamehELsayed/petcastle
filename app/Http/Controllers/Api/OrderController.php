@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Item;
-use App\Models\Coupon;
-use App\Models\CouponUsage;
 use App\Models\InventoryLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +21,7 @@ class OrderController extends Controller
             'items' => 'required|array|min:1',
             'items.*.id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
-            'coupon_code' => 'nullable|string',
-            'payment_method' => 'required|string',
+            'payment_method' => 'required|string|in:cod',
             'phone' => 'required|string',
         ]);
 
@@ -49,27 +46,11 @@ class OrderController extends Controller
                 ];
             }
 
-            // 2. Process Coupon
-            $couponId = null;
-            $discountAmount = 0;
-            if ($request->coupon_code) {
-                $coupon = Coupon::where('code', $request->coupon_code)->first();
-                if ($coupon && $coupon->isValidForOrder($totalPrice)) {
-                    $couponId = $coupon->id;
-                    $discountAmount = $coupon->calculateDiscount($totalPrice);
-                    $totalPrice -= $discountAmount;
-
-                    // Increment used count
-                    $coupon->increment('used_count');
-                }
-            }
 
             // 3. Create Order
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'address_id' => $request->address_id,
-                'coupon_id' => $couponId,
-                'discount_amount' => $discountAmount,
                 'total_price' => $totalPrice,
                 'status' => 'pending',
                 'payment_method' => $request->payment_method,
@@ -107,14 +88,6 @@ class OrderController extends Controller
                 ]);
             }
 
-            // 5. Track Coupon Usage
-            if ($couponId) {
-                CouponUsage::create([
-                    'coupon_id' => $couponId,
-                    'user_id' => Auth::id(),
-                    'order_id' => $order->id,
-                ]);
-            }
 
             return response()->json([
                 'message' => 'Order placed successfully.',

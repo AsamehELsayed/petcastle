@@ -8,7 +8,6 @@ import {
     Package, 
     ShoppingCart, 
     Users, 
-    Ticket, 
     MessageSquare, 
     Boxes, 
     Tags, 
@@ -46,12 +45,6 @@ const adminNavItems = [
         url: '/admin/inventory',
         icon: Boxes,
     },
-    {
-        title: 'Coupons',
-        url: '/admin/coupons',
-        icon: Ticket,
-    },
-
     {
         title: 'Taxonomy',
         url: '/admin/categories',

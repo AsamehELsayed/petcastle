@@ -24,8 +24,6 @@ class ItemFactory extends Factory
             'low_stock_threshold' => 10,
             'type' => $type,
             'status' => $this->faker->randomElement(['active', 'inactive', 'sold']),
-            'avg_rating' => $this->faker->randomFloat(2, 0, 5),
-            'reviews_count' => $this->faker->numberBetween(0, 100),
         ];
     }
 

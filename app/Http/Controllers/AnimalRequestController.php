@@ -9,6 +9,18 @@ use Inertia\Inertia;
 class AnimalRequestController extends Controller
 {
     /**
+     * Display the animal request form.
+     */
+    public function index()
+    {
+        $page = \App\Models\Page::where('slug', 'request-animal')->with('activeSections')->first();
+
+        return Inertia::render('AnimalRequest', [
+            'page' => $page,
+        ]);
+    }
+
+    /**
      * Store a new animal request.
      */
     public function store(Request $request)

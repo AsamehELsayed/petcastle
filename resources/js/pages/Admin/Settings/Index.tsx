@@ -1,6 +1,6 @@
 import AdminLayout from '@/layouts/admin-layout';
 import { Head, useForm } from '@inertiajs/react';
-import { Settings, Save, Globe, Info, CreditCard, Mail, Shield, MessageSquare } from 'lucide-react';
+import { Settings, Save, Globe, Info, CreditCard, Mail, Shield, MessageSquare, PanelBottom } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { type BreadcrumbItem } from '@/types';
@@ -122,6 +122,7 @@ function getIconForGroup(group: string) {
         case 'contact': return <Mail className="h-4 w-4" />;
         case 'seo': return <Shield className="h-4 w-4" />;
         case 'whatsapp': return <MessageSquare className="h-4 w-4 text-green-500" />;
+        case 'footer': return <PanelBottom className="h-4 w-4" />;
         default: return <Settings className="h-4 w-4" />;
     }
 }

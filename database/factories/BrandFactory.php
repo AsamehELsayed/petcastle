@@ -16,8 +16,6 @@ class BrandFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'description' => $this->faker->paragraph,
-            'is_active' => true,
         ];
     }
 }
