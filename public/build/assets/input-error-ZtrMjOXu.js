@@ -1,1 +1,0 @@
-import{j as n}from"./app-90LA4jlM.js";import{c as o}from"./index-TipK3_9f.js";function m({message:r,className:t="",...e}){return r?n.jsx("p",{...e,className:o("text-sm text-red-600 dark:text-red-400",t),children:r}):null}export{m as I};
